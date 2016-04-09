@@ -134,7 +134,7 @@ class UsersController extends Controller
     private function createDeleteForm(Users $user)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('api_users_delete', array('id' => $user->getId())))
+            ->setAction($this->generateUrl('users_delete', array('id' => $user->getId())))
             ->setMethod('DELETE')
             ->getForm()
             ;
