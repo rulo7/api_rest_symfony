@@ -47,12 +47,12 @@ class UsersController extends Controller
         $form = $this->createForm('AppBundle\Form\UsersType', $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('api_users_show', array('id' => $user->getId()));
+            return $this->redirectToRoute('users_show', array('id' => $user->getId()));
         }
 
         return $this->render('users/new.html.twig', array(
@@ -89,12 +89,12 @@ class UsersController extends Controller
         $editForm = $this->createForm('AppBundle\Form\UsersType', $user);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('api_users_edit', array('id' => $user->getId()));
+            return $this->redirectToRoute('users_edit', array('id' => $user->getId()));
         }
 
         return $this->render('users/edit.html.twig', array(
@@ -110,18 +110,13 @@ class UsersController extends Controller
      * @Route("/{id}", name="users_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Users $user)
+    public function deleteAction(Users $user)
     {
-        $form = $this->createDeleteForm($user);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('api_users_index');
+        return $this->redirectToRoute('users_index');
     }
 
     /**
@@ -136,7 +131,6 @@ class UsersController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('users_delete', array('id' => $user->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-            ;
+            ->getForm();
     }
 }
