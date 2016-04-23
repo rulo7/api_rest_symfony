@@ -18,7 +18,11 @@ class UsersRestController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('AppBundle:Users')->findAll();
+        //$users = $em->getRepository('AppBundle:Users')->findAll();
+        $users = $em->getRepository('AppBundle:Users')->findBy(
+            array(),
+            array('score' => 'DESC')
+        );
 
         return array(
             'users' => $users
